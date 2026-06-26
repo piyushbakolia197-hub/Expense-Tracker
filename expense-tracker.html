@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #09070f;
+        --surface: rgba(20, 18, 29, 0.94);
+        --surface-soft: rgba(29, 26, 40, 0.96);
+        --surface-border: rgba(212, 175, 55, 0.18);
+        --text: #f7f2e9;
+        --muted: #b8aa8b;
+        --primary: #d4af37;
+        --primary-strong: #b88920;
+        --card-shadow: rgba(0, 0, 0, 0.42);
+        --danger: #ff7373;
+        --danger-strong: #e24f4f;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.18), transparent 20%),
+          radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.06), transparent 22%),
+          linear-gradient(180deg, #09070f 0%, #040306 100%);
+        color: var(--text);
+        letter-spacing: 0.01em;
+        line-height: 1.6;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+      .container {
+        max-width: 980px;
+        margin: 28px auto;
+        padding: 0 20px 34px;
+      }
+      header {
+        text-align: center;
+        padding: 26px 0 12px;
+      }
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-align: left;
+      }
+      .brand-mark {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: var(--primary);
+        color: white;
+        font-size: 1.6rem;
+      }
+      .brand-title {
+        margin: 0;
+        font-size: 2.1rem;
+        letter-spacing: -0.03em;
+        font-weight: 800;
+      }
+      .brand-subtitle {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 2.26rem;
+        letter-spacing: -0.03em;
+        font-weight: 800;
+      }
+      header p {
+        margin: 10px auto 0;
+        max-width: 700px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .tracker-card {
+        margin-top: 24px;
+        background: var(--surface);
+        border-radius: 32px;
+        box-shadow: 0 34px 120px var(--card-shadow);
+        overflow: hidden;
+        border: 1px solid var(--surface-border);
+        backdrop-filter: blur(18px);
+      }
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(160px, 1fr));
+        gap: 1rem;
+        padding: 28px;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.98), rgba(212, 175, 55, 0.75));
+        color: #111111;
+      }
+      .summary-item {
+        padding: 26px 24px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .summary-item h2 {
+        margin: 0 0 12px;
+        font-size: 1.15rem;
+        letter-spacing: 0.01em;
+      }
+      .summary-item p {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 800;
+      }
+      .form-card,
+      .history-card {
+        padding: 32px;
+      }
+      .form-card {
+        display: grid;
+        gap: 22px;
+      }
+      .form-group {
+        display: grid;
+        gap: 14px;
+      }
+      label {
+        font-weight: 700;
+      }
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 16px 20px;
+        min-height: 54px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 1rem;
+      }
+      select,
+      input {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+      }
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+      option {
+        color: var(--text);
+        background: var(--surface-soft);
+      }
+      button {
+        cursor: pointer;
+        border: none;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.95), rgba(212, 175, 55, 0.75));
+        color: #111111;
+        font-weight: 700;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+      button:hover {
+        background: linear-gradient(135deg, rgba(212, 175, 55, 1), rgba(212, 175, 55, 0.85));
+        transform: translateY(-1px);
+      }
+      .secondary-btn {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(6px);
+      }
+      .secondary-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .button-group {
+        display: grid;
+        gap: 12px;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .edit-btn {
+        background: #0b72ff;
+        color: #ffffff;
+      }
+      .edit-btn:hover {
+        background: #0659c0;
+      }
+      .history-card h2 {
+        margin: 0 0 18px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 18px 16px;
+        text-align: left;
+      }
+      th {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+      }
+      tr + tr td {
+        border-top: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .empty-state {
+        padding: 32px 12px;
+        text-align: center;
+        color: #486581;
+      }
+      .delete-btn {
+        padding: 12px 16px;
+        background: rgba(242, 84, 84, 0.95);
+        color: white;
+        border: none;
+        border-radius: 14px;
+        cursor: pointer;
+      }
+      .delete-btn:hover {
+        background: var(--danger-strong);
+      }
+      @media (max-width: 760px) {
+        .summary {
+          grid-template-columns: 1fr;
+        }
+        .tracker-card {
+          border-radius: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-top">
+          <div class="brand">
+            <div class="brand-mark">💰</div>
+            <div>
+              <h1 class="brand-title">Expense Tracker</h1>
+              <p class="brand-subtitle">Track your daily expenses with categories, totals, and a running history all in one place.</p>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="secondary-btn" onclick="window.location.href='welcome.html'">Back to Welcome</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="tracker-card">
+        <section class="summary">
+          <div class="summary-item">
+            <h2>Total Budget</h2>
+            <p id="total-budget">0.00</p>
+          </div>
+          <div class="summary-item">
+            <h2>Total Spent</h2>
+            <p id="total-spent">0.00</p>
+          </div>
+          <div class="summary-item">
+            <h2>Remaining</h2>
+            <p id="remaining-balance">0.00</p>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <div class="form-group">
+            <label for="budget-input">Set Budget</label>
+            <input type="number" id="budget-input" placeholder="Enter budget amount" min="0" />
+          </div>
+          <div class="form-group">
+            <label for="expense-title">Expense Title</label>
+            <input type="text" id="expense-title" placeholder="e.g. Groceries" />
+          </div>
+          <div class="form-group">
+            <label for="expense-category">Category</label>
+            <select id="expense-category">
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="expense-currency">Currency</label>
+            <select id="expense-currency">
+              <option value="USD">USD ($)</option>
+              <option value="INR">INR (₹)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="JPY">JPY (¥)</option>
+              <option value="AUD">AUD (A$)</option>
+              <option value="CAD">CAD (C$)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="expense-amount">Amount</label>
+            <input type="number" id="expense-amount" placeholder="Enter amount" min="0" step="0.01" />
+          </div>
+          <div class="button-group">
+            <button id="add-expense">Add Expense</button>
+            <button type="button" id="cancel-edit" class="secondary-btn" hidden>Cancel</button>
+          </div>
+        </section>
+
+        <section class="history-card">
+          <h2>Expense History</h2>
+          <div id="expense-history"></div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      const state = {
+        budget: 0,
+        expenses: [],
+        currency: 'USD',
+      };
+
+      const totalBudgetEl = document.getElementById('total-budget');
+      const totalSpentEl = document.getElementById('total-spent');
+      const remainingBalanceEl = document.getElementById('remaining-balance');
+      const expenseHistoryEl = document.getElementById('expense-history');
+      const budgetInput = document.getElementById('budget-input');
+      const expenseTitle = document.getElementById('expense-title');
+      const expenseCategory = document.getElementById('expense-category');
+      const expenseCurrency = document.getElementById('expense-currency');
+      const expenseAmount = document.getElementById('expense-amount');
+      const addExpenseBtn = document.getElementById('add-expense');
+
+      function formatCurrency(value) {
+        const amount = Number(value) || 0;
+        return new Intl.NumberFormat(undefined, {
+          style: 'currency',
+          currency: state.currency,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(amount);
+      }
+
+      function calculateTotals() {
+        const totalSpent = state.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        const remaining = state.budget - totalSpent;
+        return { totalSpent, remaining };
+      }
+
+      function renderSummary() {
+        const totals = calculateTotals();
+        totalBudgetEl.textContent = formatCurrency(state.budget);
+        totalSpentEl.textContent = formatCurrency(totals.totalSpent);
+        remainingBalanceEl.textContent = formatCurrency(totals.remaining);
+      }
+
+      function removeExpense(index) {
+        state.expenses.splice(index, 1);
+        renderHistory();
+        renderSummary();
+      }
+
+      function renderHistory() {
+        if (state.expenses.length === 0) {
+          expenseHistoryEl.innerHTML = '<div class="empty-state">No expenses added yet.</div>';
+          return;
+        }
+
+        expenseHistoryEl.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${state.expenses
+                .map(
+                  (expense, index) => `
+                    <tr>
+                      <td>${expense.title}</td>
+                      <td>${expense.category}</td>
+                      <td>${formatCurrency(expense.amount)}</td>
+                      <td class="action-buttons">
+                        <button class="secondary-btn edit-btn" data-index="${index}">Edit</button>
+                        <button class="delete-btn" data-index="${index}">Delete</button>
+                      </td>
+                    </tr>`
+                )
+                .join('')}
+            </tbody>
+          </table>
+        `;
+
+        document.querySelectorAll('.edit-btn').forEach((button) => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.index);
+            startEdit(index);
+          });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach((button) => {
+          button.addEventListener('click', () => {
+            const index = Number(button.dataset.index);
+            removeExpense(index);
+          });
+        });
+      }
+
+      function addExpense() {
+        const title = expenseTitle.value.trim();
+        const category = expenseCategory.value;
+        const amount = Number(expenseAmount.value);
+
+        if (!title || isNaN(amount) || amount <= 0) {
+          alert('Please enter a valid title and amount.');
+          return;
+        }
+
+        state.expenses.push({ title, category, amount });
+        expenseTitle.value = '';
+        expenseAmount.value = '';
+        renderHistory();
+        renderSummary();
+      }
+
+      const cancelEditBtn = document.getElementById('cancel-edit');
+      let editingIndex = -1;
+      let lastAutoTitle = '';
+
+      function resetForm() {
+        expenseTitle.value = '';
+        expenseAmount.value = '';
+        expenseCategory.value = 'Food';
+        expenseCurrency.value = state.currency;
+        lastAutoTitle = '';
+        addExpenseBtn.textContent = 'Add Expense';
+        cancelEditBtn.hidden = true;
+        editingIndex = -1;
+      }
+
+      function startEdit(index) {
+        const expense = state.expenses[index];
+        expenseTitle.value = expense.title;
+        expenseCategory.value = expense.category;
+        expenseAmount.value = expense.amount;
+        lastAutoTitle = expense.title;
+        addExpenseBtn.textContent = 'Update Expense';
+        cancelEditBtn.hidden = false;
+        editingIndex = index;
+      }
+
+      function applyEdit() {
+        const title = expenseTitle.value.trim();
+        const category = expenseCategory.value;
+        const amount = Number(expenseAmount.value);
+
+        if (!title || isNaN(amount) || amount <= 0) {
+          alert('Please enter a valid title and amount.');
+          return;
+        }
+
+        state.expenses[editingIndex] = { title, category, amount };
+        resetForm();
+        renderHistory();
+        renderSummary();
+      }
+
+      addExpenseBtn.addEventListener('click', () => {
+        if (editingIndex >= 0) {
+          applyEdit();
+          return;
+        }
+        addExpense();
+      });
+
+      cancelEditBtn.addEventListener('click', resetForm);
+
+      budgetInput.addEventListener('input', () => {
+        state.budget = Number(budgetInput.value) || 0;
+        renderSummary();
+      });
+
+      expenseCurrency.addEventListener('change', () => {
+        state.currency = expenseCurrency.value;
+        renderSummary();
+        renderHistory();
+      });
+
+      expenseCategory.addEventListener('change', () => {
+        const defaultTitle = `${expenseCategory.value} expense`;
+        if (!expenseTitle.value || expenseTitle.value === lastAutoTitle) {
+          expenseTitle.value = defaultTitle;
+          lastAutoTitle = defaultTitle;
+        }
+      });
+
+      expenseTitle.addEventListener('input', () => {
+        if (expenseTitle.value !== lastAutoTitle) {
+          lastAutoTitle = expenseTitle.value;
+        }
+      });
+
+      renderSummary();
+      renderHistory();
+    </script>
+  </body>
+</html>

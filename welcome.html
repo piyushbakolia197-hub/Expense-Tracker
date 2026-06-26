@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome | Expense Tracker</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #100f18;
+        --surface: rgba(23, 22, 31, 0.92);
+        --surface-strong: rgba(28, 27, 40, 0.95);
+        --surface-border: rgba(212, 175, 55, 0.16);
+        --text: #f7f2e9;
+        --muted: #b8aa8b;
+        --primary: #d4af37;
+        --primary-strong: #b88920;
+        --shadow: rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.18), transparent 22%),
+          radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.06), transparent 18%),
+          linear-gradient(135deg, var(--bg) 0%, #0a0811 100%);
+        color: var(--text);
+        letter-spacing: 0.01em;
+        line-height: 1.6;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
+
+      .welcome-card {
+        width: min(780px, calc(100% - 32px));
+        background: var(--surface);
+        border-radius: 34px;
+        box-shadow: 0 34px 128px var(--shadow);
+        padding: 48px 44px;
+        border: 1px solid var(--surface-border);
+        backdrop-filter: blur(18px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .brand-mark {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: var(--primary);
+        color: white;
+        font-size: 1.6rem;
+        box-shadow: 0 18px 40px var(--shadow);
+      }
+
+      .brand-name {
+        margin: 0;
+        font-size: 1rem;
+        letter-spacing: 0.18em;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .brand-tag {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .welcome-card h1 {
+        margin: 0 0 18px;
+        font-size: clamp(2.6rem, 4vw, 4.2rem);
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+        font-weight: 900;
+      }
+
+      .welcome-card p {
+        margin: 0 0 36px;
+        max-width: 700px;
+        font-size: 1.05rem;
+        line-height: 1.75;
+        color: var(--muted);
+      }
+
+      .feature-list {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 38px;
+      }
+
+      .feature-item {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 22px;
+        padding: 22px 24px;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+      }
+
+      .feature-item strong {
+        color: var(--primary);
+        min-width: 5rem;
+        font-size: 1rem;
+      }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% - 40px);
+        max-width: 500px;
+        padding: 18px 32px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: linear-gradient(135deg, #f5d261, #d4af37);
+        color: #111111;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.02em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 20px 50px rgba(212, 175, 55, 0.22);
+        margin: 0 auto;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 60px rgba(212, 175, 55, 0.25);
+      }
+
+      @media (max-width: 640px) {
+        .welcome-card {
+          padding: 28px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="welcome-card">
+      <div class="brand">
+        <div class="brand-mark">💰</div>
+        <div>
+          <p class="brand-name">Expense Tracker</p>
+          <p class="brand-tag">Smart finance made simple</p>
+        </div>
+      </div>
+      <h1>Welcome to Your Expense Tracker</h1>
+      <p>Manage your budget, record spending, and stay in control of your finances with a clean and easy-to-use interface.</p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <strong>Set Budget</strong>
+          <span>Enter your monthly budget and see how much money remains as expenses are added.</span>
+        </div>
+        <div class="feature-item">
+          <strong>Track Expenses</strong>
+          <span>Save each expense with a title, category, and amount so you can review spending at a glance.</span>
+        </div>
+        <div class="feature-item">
+          <strong>Review History</strong>
+          <span>View all transactions in one place and delete or edit entries as needed.</span>
+        </div>
+      </div>
+      <div style="text-align: center;">
+        <button class="cta-button" onclick="window.location.href='expense-tracker.html'">Open Expense Tracker</button>
+      </div>
+    </main>
+  </body>
+</html>
